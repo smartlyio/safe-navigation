@@ -8,7 +8,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "render": "yarn ts-node render.ts",
-    "build": "yarn render && tsc"
+    "build": "rm -rf ./dist/* && yarn render && tsc"
   },
   "dependencies": {
     "@types/lodash": "^4.14.77",

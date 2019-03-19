@@ -16,6 +16,18 @@ assert(safe(o).a.b.$ === 'x')
 
 ```
 
+The optional chaining also takes into account union types.
+
+```js
+import safe from '../index'
+import * as assert from 'assert'
+
+type A = { a: number } | { b: string }
+const o: A = { a: 1 }
+assert(safe(o).a.$ === 1)
+
+```
+
 ## map with promises `.$pmap`
 
 Mutates the given object using a async function and returns the mutated object
