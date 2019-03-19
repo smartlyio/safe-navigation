@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "declaration": true,
     "target": "es2017",
     "lib": ["es6", "es2017", "DOM", "esnext.asynciterable"],
     "module": "commonjs",
@@ -15,7 +16,7 @@
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "baseUrl": "./src/types",
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true
+    "outDir": "dist"
   },
   "exclude": []
 }

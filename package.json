@@ -4,8 +4,12 @@
   "description": "type and null safe json object navigation",
   "private": true,
   "author": "Smartly.io",
-  "main": "index.ts",
-  "scripts": {},
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "render": "yarn ts-node render.ts",
+    "build": "yarn render && tsc"
+  },
   "dependencies": {
     "@types/lodash": "^4.14.77",
     "lodash": "^4.17.4"
