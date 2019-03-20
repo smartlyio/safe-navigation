@@ -1,7 +1,7 @@
 {
   "name": "safe-navigation",
   "license": "MIT",
-  "version": "1",
+  "version": "1.0.0",
   "description": "typescript and null safe json object navigation",
   "private": false,
   "author": "Smartly.io",
