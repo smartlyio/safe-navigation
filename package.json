@@ -2,7 +2,7 @@
   "name": "safe-navigation",
   "license": "MIT",
   "version": "1",
-  "description": "type and null safe json object navigation",
+  "description": "typescript and null safe json object navigation",
   "private": false,
   "author": "Smartly.io",
   "main": "dist/index.js",
@@ -15,6 +15,13 @@
     "@types/lodash": "^4.14.77",
     "lodash": "^4.17.4"
   },
+  "keywords": [
+    "safe navigation",
+    "typescript",
+    "union type",
+    "elvis operator",
+    "optional chaining"
+  ],
   "devDependencies": {
     "typescript": "^3.3.3333",
     "@types/node": "^11.11.3",
