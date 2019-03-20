@@ -1,3 +1,4 @@
+// yarn ts-node examples/unions.ts
 import safe from '../index'
 import * as assert from 'assert'
 

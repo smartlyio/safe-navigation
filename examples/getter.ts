@@ -1,3 +1,4 @@
+// yarn ts-node examples/getter.ts
 import safe from '../index'
 import * as assert from 'assert'
 

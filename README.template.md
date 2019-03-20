@@ -18,7 +18,7 @@ The optional chaining also takes into account union types.
 
 ## map with promises `.$pmap`
 
-Mutates the given object using a async function and returns the mutated object
+Returns a new object with the target mapped using a promise returning map function
 
 ```js
 >>examples/pmap.ts
