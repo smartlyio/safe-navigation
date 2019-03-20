@@ -3,7 +3,7 @@
   "license": "MIT",
   "version": "1",
   "description": "type and null safe json object navigation",
-  "private": true,
+  "private": false,
   "author": "Smartly.io",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
