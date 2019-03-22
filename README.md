@@ -30,6 +30,38 @@ assert(safe(o).a.$ === 1)
 
 ```
 
+## set value `.$set`
+
+Returns a new object with the target set to value if the path to value exists
+
+```js
+// yarn ts-node examples/set.ts
+import safe from '../index'
+import * as assert from 'assert'
+
+type A = { a?: { b?: string }}
+const o: A = { a: { b: 'old'}}
+const newValue: A = safe(o).a.b.$set('new');
+assert(safe(newValue).a.b.$ === 'new')
+
+```
+
+## map value `.$map`
+
+Maps the value at end of the path
+
+```js
+// yarn ts-node examples/map.ts
+import safe from '../index'
+import * as assert from 'assert'
+
+type A = { a?: { b?: string }}
+const o: A = { a: { b: 'old'}}
+const newValue: A = safe(o).a.b.$map((n: any) => n + ' to new');
+assert(safe(newValue).a.b.$ === 'old to new')
+
+```
+
 ## map with promises `.$pmap`
 
 Returns a new object with the target mapped using a promise returning map function

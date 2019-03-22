@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as child from 'child_process';
 import * as assert from 'assert';
+import * as util from 'util';
 
 const md: string = fs.readFileSync('README.template.md', 'utf8');
 const examples: Array<string> = [];
@@ -13,7 +14,7 @@ fs.writeFileSync('README.md', md.replace(/^>>(.*)/mg, (match, file) => {
     return example;
 }));
 
-examples.forEach(example => {
+Promise.all(examples.map(example => {
     console.log('testing ' + example)
-    child.execSync(example);
-});
+    util.promisify(child.exec)(example);
+}));

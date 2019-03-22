@@ -2,6 +2,8 @@ import * as _ from 'lodash';
 
 interface SafeProxy<Initial, To> {
     $: undefined | To;
+    $map: (f: ((t: To) => To)) => Initial;
+    $set: (value: To) => Initial;
     $pmap: (f: ((t: To) => Promise<To>)) => Promise<Initial>;
 }
 
@@ -21,25 +23,73 @@ interface Proxied {
     path: Array<string | number>;
 }
 
+const noValue = Symbol;
+
+function hasPath(target: any, path: Array<string>) {
+    if (path.length === 0) {
+        return target;
+    }
+    const root = path.length > 1 ? _.get(target, path.slice(0, -1)) : target;
+    if (!root || typeof root !== 'object') {
+        return noValue;
+    }
+    const lastPath = path[path.length - 1];
+    if (Array.isArray(root)) {
+        if (!lastPath.match(/([1-9][0-9]*)|0/)) {
+            return noValue;
+        }
+        const ix = Number(lastPath);
+        if (isNaN(ix) || ix < 0 || ix >= root.length) {
+            return noValue;
+        }
+        return root[ix];
+    }
+    return root[lastPath];
+}
+
+function set(target: any, path: string[], to: any): any {
+    const value = hasPath(target, path);
+    if (value !== noValue) {
+        if (path.length === 0) {
+            return to;
+        }
+        return _.set(_.cloneDeep(target), path, to);
+    }
+    return target;
+}
+
 function _safe<Initial, T>(v: Proxied): Safe<Initial, T> {
     return new Proxy(v, {
         get(target: any, key: keyof Safe<Initial, T>) {
             if (key === '$') {
-                return _.get(target.value, target.path);
+                const value = hasPath(target.value, target.path);
+                return value === noValue ? undefined : value;
+            }
+            if (key === '$set') {
+                return (newValue: any) => set(target.value, target.path, newValue);
+            }
+            if (key === '$map') {
+                return (f: (t: T) => T) => {
+                    const value = hasPath(target.value, target.path);
+                    if (value === noValue) {
+                        return target.value;
+                    }
+                    return set(target.value, target.path, f(value))
+                }
             }
             if (key === '$pmap') {
-                const value = _.get(target.value, target.path);
-                if (value !== undefined) {
-                    return async (f: (t: T) => Promise<T>) => {
+                return async (f: (t: T) => Promise<T>) => {
+                    const value = hasPath(target.value, target.path);
+                    if (value !== noValue) {
                         const mapped = await f(value);
                         const newTarget = _.cloneDeep(target.value);
                         _.set(newTarget, target.path, mapped);
                         return newTarget;
                     };
+                    return target.value
                 }
-                return async () => target.value;
             }
-            return _safe({ value: target.value, path: target.path.concat([key]) });
+            return _safe({ value: target.value, path: [...target.path, key] });
         }
     });
 }
