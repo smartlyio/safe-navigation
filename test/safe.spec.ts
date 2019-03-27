@@ -1,6 +1,7 @@
 import safe from '../index';
 import * as jsc from 'jsverify';
 import * as _ from 'lodash';
+import * as assert from 'assert';
 
 interface Type {
     a?: {
@@ -38,7 +39,7 @@ describe("safe", () => {
     describe('.$pmap', () => {
         it('sets the value', async () => {
             const v: Type = { a: { b: 1}};
-            const n = await safe(v).a.b.$pmap(async o => o + 1);
+            const n = await safe(v).a.b.$pmap(async o => o != null ? o + 1 : assert.fail('cant happen'));
             expect(safe(n).a.b.$).toEqual(2)
         });
 

@@ -2,9 +2,9 @@ import * as _ from 'lodash';
 
 interface SafeProxy<Initial, To> {
     $: undefined | To;
-    $map: (f: ((t: To) => To)) => Initial;
+    $map: (f: ((t: To | undefined) => To)) => Initial;
     $set: (value: To) => Initial;
-    $pmap: (f: ((t: To) => Promise<To>)) => Promise<Initial>;
+    $pmap: (f: ((t: To | undefined) => Promise<To>)) => Promise<Initial>;
 }
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((
