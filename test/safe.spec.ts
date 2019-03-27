@@ -43,10 +43,10 @@ describe("safe", () => {
             expect(safe(n).a.b.$).toEqual(2)
         });
 
-        it('sets the value to undefined leaf', async () => {
+        it('does not set value to undefined leaf', async () => {
             const v: Type = { a: { b: undefined}};
-            const n = await safe(v).a.b.$pmap(async o => 1);
-            expect(safe(n).a.b.$).toEqual(1)
+            const n = await safe(v).a.b.$pmap(async o => assert.fail('cant happen'));
+            expect(safe(n).a.b.$).toEqual(undefined)
         });
 
         it('does not map the value if the path is undefined', async () => {
@@ -102,10 +102,10 @@ describe("safe", () => {
             expect(safe(n).a.b.$).toEqual(2)
         });
 
-        it('sets the value to undefined leaf', () => {
+        it('does not set the value to undefined leaf', () => {
             const v: Type = { a: { b: undefined}};
             const n = safe(v).a.b.$set(2);
-            expect(safe(n).a.b.$).toEqual(2)
+            expect(safe(n).a.b.$).toBeUndefined()
         });
 
         it('does not set the value if the path is undefined', () => {
