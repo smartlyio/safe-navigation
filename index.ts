@@ -41,7 +41,27 @@ function set(target: any, path: string[], to: any): any {
     if (path.length === 0) {
         return to;
     }
-    return _.set(_.cloneDeep(target), path, to);
+    return _.set(clonePath(target, path), path, to);
+}
+
+function clonePath(target: any, path: Array<any>) {
+    let cursor: any = _.clone(target);
+    const root = cursor;
+    let i = 0;
+    while(i < path.length) {
+        if (!Array.isArray(cursor) && !_.isObject(cursor)) {
+            break;
+        }
+        const at = (cursor as any)[path[i]];
+        (cursor as any)[path[i]] = _.clone(at);
+        if (at && (Array.isArray(at) || _.isObject(at))) {
+            cursor = (cursor as any)[path[i]];
+            i++;
+        } else {
+            break;
+        }
+    }
+    return root;
 }
 
 function _safe<Initial, T>(v: Proxied): Safe<Initial, T> {
