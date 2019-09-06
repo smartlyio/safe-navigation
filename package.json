@@ -10,7 +10,9 @@
   "scripts": {
     "test": "yarn jest test/",
     "render": "yarn ts-node render.ts",
-    "build": "rm -rf ./dist/* && yarn test && yarn render && tsc"
+    "build": "rm -rf ./dist/* && yarn test && yarn render && tsc",
+    "lint": "tslint -c tslint.json --project tsconfig.json",
+    "lint:fix": "tslint --fix -c tslint.json --project tsconfig.json"
   },
   "repository": {
     "type": "git",
@@ -32,6 +34,7 @@
     "@types/node": "^11.11.3",
     "jest": "^24.5.0",
     "jsverify": "^0.8.4",
+    "prettier": "^1.18.2",
     "ts-jest": "^24.0.0",
     "ts-node-dev": "^1.0.0-pre.24",
     "tslint": "^5.7.0",

@@ -39,6 +39,3 @@ Returns a new object with the target mapped using a promise returning map functi
 ```js
 >>examples/pmap.ts
 ```
-
-
-
