@@ -1,8 +1,10 @@
 // yarn ts-node examples/set.ts
-import safe from '../index'
-import * as assert from 'assert'
+import safe from '../index';
+import * as assert from 'assert';
 
-type A = { a?: { b?: string }}
-const o: A = { a: { b: 'old'}}
+interface A {
+  a?: { b?: string };
+}
+const o: A = { a: { b: 'old' } };
 const newValue: A = safe(o).a.b.$set('new');
-assert(safe(newValue).a.b.$ === 'new')
+assert(safe(newValue).a.b.$ === 'new');
