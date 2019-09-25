@@ -12,7 +12,8 @@
     "render": "yarn ts-node render.ts",
     "build": "rm -rf ./dist/* && yarn lint && yarn test && yarn render && tsc",
     "lint": "tslint -c tslint.json --project tsconfig.json",
-    "lint:fix": "tslint --fix -c tslint.json --project tsconfig.json"
+    "lint:fix": "tslint --fix -c tslint.json --project tsconfig.json",
+    "prepublish": "yarn build"
   },
   "repository": {
     "type": "git",
