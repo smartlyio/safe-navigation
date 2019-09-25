@@ -98,7 +98,7 @@ function _safe<Initial, T>(v: Proxied): Safe<Initial, T> {
   });
 }
 
-export default function safe<T>(v: T | undefined): Safe<T, T> {
+export default function safe<T>(v: T | undefined | null): Safe<T, T> {
   const p = {
     value: v,
     path: [] as Proxied['path']
