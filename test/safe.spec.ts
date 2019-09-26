@@ -127,6 +127,7 @@ describe('safe', () => {
       expect(safe(n).arr[1].$).toEqual(undefined);
     });
   });
+
   describe('.$', () => {
     jsc.property('gets value', paths, path => {
       const target = objectMatchingPath(path, 'X');

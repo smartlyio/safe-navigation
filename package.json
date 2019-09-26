@@ -1,7 +1,7 @@
 {
   "name": "@smartlyio/safe-navigation",
   "license": "MIT",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "typescript and null safe json object navigation",
   "private": false,
   "author": "Smartly.io",
@@ -41,7 +41,7 @@
     "tslint": "^5.7.0",
     "tslint-config-prettier": "^1.5.0",
     "tslint-plugin-prettier": "^1.3.0",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.6.3"
   },
   "jest": {
     "testEnvironment": "node",
