@@ -99,5 +99,5 @@ export default function safe<T>(v: T | undefined | null): Safe<T, T> {
     value: v,
     path: [] as Proxied['path']
   };
-  return _safe(p);
+  return _safe<T, T>(p);
 }
