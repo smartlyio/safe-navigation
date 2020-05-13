@@ -17,10 +17,10 @@ fs.writeFileSync(
   })
 );
 
-// tslint:disable-next-line:no-floating-promises
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 Promise.all(
   examples.map(example => {
-    // tslint:disable-next-line:no-console
+    // eslint-disable-next-line no-console
     console.log('testing ' + example);
     return util.promisify(child.exec)(example);
   })

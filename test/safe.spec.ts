@@ -46,19 +46,19 @@ describe('safe', () => {
 
     it('does not set value to undefined leaf', async () => {
       const v: Type = { a: { b: undefined } };
-      const n = await safe(v).a.b.$pmap(async o => assert.fail('cant happen'));
+      const n = await safe(v).a.b.$pmap(async () => assert.fail('cant happen'));
       expect(safe(n).a.b.$).toEqual(undefined);
     });
 
     it('does not map the value if the path is undefined', async () => {
       const v: Type = { a: { b: 1 } };
-      const n = await safe(v).missing.value.$pmap(async o => 1);
+      const n = await safe(v).missing.value.$pmap(async () => 1);
       expect(safe(n).missing.$).toEqual(undefined);
     });
 
     it('does not map the value if the array index is undefined', async () => {
       const v: Type = { arr: [{ value: 1 }] };
-      const n = await safe(v).arr[1].$pmap(async o => {
+      const n = await safe(v).arr[1].$pmap(async () => {
         throw new Error('cant happen');
       });
       expect(safe(n).arr[1].$).toEqual(undefined);

@@ -86,7 +86,7 @@ async function test() {
   assert(safe(o).a.b.$ === 'x');
   assert(safe(result).a.b.$ === 'got x');
 }
-// tslint:disable-next-line:no-floating-promises
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 test();
 
 ```

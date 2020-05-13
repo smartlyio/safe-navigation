@@ -1,0 +1,8 @@
+node_modules
+coverage
+.vscode
+.github
+.git
+bin
+load_tests
+**/*.generated.ts
