@@ -8,7 +8,6 @@ interface Type {
     b?: number;
   };
   arr?: Array<{ value?: number }>;
-  missing?: { value: number };
 }
 
 function roll(target: any, path: Array<string | number>): any {
@@ -52,6 +51,7 @@ describe('safe', () => {
 
     it('does not map the value if the path is undefined', async () => {
       const v: Type = { a: { b: 1 } };
+      // @ts-expect-error
       const n = await safe(v).missing.value.$pmap(async () => 1);
       expect(safe(n).missing.$).toEqual(undefined);
     });
@@ -117,6 +117,7 @@ describe('safe', () => {
 
     it('does not set the value if the path is undefined', () => {
       const v: Type = { a: { b: 1 } };
+      // @ts-expect-error
       const n = safe(v).missing.value.$set(1);
       expect(safe(n).missing.$).toEqual(undefined);
     });
@@ -148,6 +149,7 @@ describe('safe', () => {
 
     it('produces undefined if path does not exist', () => {
       const v: Type = { a: { b: 1 } };
+      // @ts-expect-error
       expect(safe(v).missing.$).toBe(undefined);
     });
   });
