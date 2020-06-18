@@ -157,6 +157,8 @@ describe('safe', () => {
 
 type UnionType = { b: string } | { a: number };
 
+type UnionTypeWithIndex = { b: string } | { a: number; [key: string]: unknown };
+
 type NestedUnion = { a: { x: number } } | { b: { x: string } };
 
 type SharingUnion = { a: string } | { a: number };
@@ -165,6 +167,11 @@ describe('union type traversal', () => {
   const value: any = null as any;
   it('narrows to union value', () => {
     const num: number | undefined = safe<NestedUnion>(value).a.x.$;
+    expect(num).toBeFalsy();
+  });
+
+  it('narrows to union value with indexed keys', () => {
+    const num: number | undefined = safe<UnionTypeWithIndex>(value).a.$;
     expect(num).toBeFalsy();
   });
 
