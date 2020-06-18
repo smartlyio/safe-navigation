@@ -155,39 +155,42 @@ describe('safe', () => {
   });
 });
 
-type UnionType =
-  | { b: string }
-  | { a: number };
+type UnionType = { b: string } | { a: number };
 
-type NestedUnion =
-   | { a: { x: number} }
-   | { b: { x: string } }
+type NestedUnion = { a: { x: number } } | { b: { x: string } };
+
+type SharingUnion = { a: string } | { a: number };
 
 describe('union type traversal', () => {
   const value: any = null as any;
-  it ('narrows to union value', () => {
+  it('narrows to union value', () => {
     const num: number | undefined = safe<NestedUnion>(value).a.x.$;
     expect(num).toBeFalsy();
   });
 
-  it ('rejects mismatching type from nested union', () => {
+  it('rejects mismatching type from nested union', () => {
     // @ts-expect-error
     const num: number | undefined = safe<NestedUnion>(value).b.x.$;
     expect(num).toBeFalsy();
   });
 
-  it ('rejects missing type from union', () => {
+  it('rejects missing type from union', () => {
     // @ts-expect-error
     const num: number | undefined = safe<NestedUnion>(value).b.r.$;
     expect(num).toBeFalsy();
   });
 
-  it ('narrows to union value', () => {
+  it('makes union of leaf types', () => {
+    const num: string | number | undefined = safe<SharingUnion>(value).a.$;
+    expect(num).toBeFalsy();
+  });
+
+  it('narrows to union value', () => {
     const num: number | undefined = safe<UnionType>(value).a.$;
     expect(num).toBeFalsy();
   });
 
-  it ('rejects mismatching type from union\'', () => {
+  it("rejects mismatching type from union'", () => {
     // @ts-expect-error
     const num: number | undefined = safe<UnionType>(value).b.$;
     expect(num).toBeFalsy();
