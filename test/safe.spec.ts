@@ -158,10 +158,13 @@ describe('safe', () => {
 type UnionType = { b: string } | { a: number };
 
 type UnionTypeWithIndex = { b: string } | { a: number; [key: string]: unknown };
+type UnionTypeWithIndexToNumber = { b: string } | { a: number; [key: string]: number };
 
 type NestedUnion = { a: { x: number } } | { b: { x: string } };
 
 type SharingUnion = { a: string } | { a: number };
+
+type ArrayType = { a: Array<{ x: number }> };
 
 describe('union type traversal', () => {
   const value: any = null as any;
@@ -170,9 +173,35 @@ describe('union type traversal', () => {
     expect(num).toBeFalsy();
   });
 
-  it('narrows to union value with indexed keys', () => {
-    const num: number | undefined = safe<UnionTypeWithIndex>(value).a.$;
-    expect(num).toBeFalsy();
+  describe('arrays', () => {
+    it('goes through arrays', () => {
+      const num: number | undefined = safe<ArrayType>(value).a[0].x.$;
+      expect(num).toBeFalsy();
+    });
+
+    it('rejects incorrect type', () => {
+      // @ts-expect-error
+      const num: string | undefined = safe<ArrayType>(value).a[0].x.$;
+      expect(num).toBeFalsy();
+    });
+  });
+
+  describe('indexed keys', () => {
+    it('prefers named prop types', () => {
+      const num: number | undefined = safe<UnionTypeWithIndex>(value).a.$;
+      expect(num).toBeFalsy();
+    });
+
+    it('allows indexed fields', () => {
+      const num: number | undefined = safe<UnionTypeWithIndexToNumber>(value).z.$;
+      expect(num).toBeFalsy();
+    });
+
+    it('join both sides of union', () => {
+      // @ts-expect-error
+      const num: number | undefined = safe<UnionTypeWithIndexToNumber>(value).b.$;
+      expect(num).toBeFalsy();
+    });
   });
 
   it('rejects mismatching type from nested union', () => {
