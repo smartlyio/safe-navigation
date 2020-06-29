@@ -163,6 +163,7 @@ type UnionTypeWithIndexToNumber = { b: string } | { a: number; [key: string]: nu
 type NestedUnion = { a: { x: number } } | { b: { x: string } };
 
 type SharingUnion = { a: string } | { a: number };
+type SharingUnionLiteral = { a: 'toot' } | { a: 'doot' };
 
 type ArrayType = { a: Array<{ x: number }> };
 
@@ -229,6 +230,11 @@ describe('union type traversal', () => {
   it("rejects mismatching type from union'", () => {
     // @ts-expect-error
     const num: number | undefined = safe<UnionType>(value).b.$;
+    expect(num).toBeFalsy();
+  });
+
+  it('makes union of leaf types', () => {
+    const num: 'toot' | 'doot' | undefined = safe<SharingUnionLiteral>(value).a.$;
     expect(num).toBeFalsy();
   });
 });
