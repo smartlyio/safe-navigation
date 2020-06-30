@@ -7,13 +7,15 @@ interface SafeProxy<Initial, To> {
   $pmap: (f: (t: To) => Promise<To>) => Promise<Initial>;
 }
 
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void
-  ? I
-  : never;
+type UnionToIntersection<U> = ((U extends any ? (k: U) => void : never) extends (k: infer I) => void
+  ? { [K in Exclude<keyof I, keyof U>]: I[K] }
+  : never) &
+  U;
 
 export type U<T> = {
-  [K in keyof Required<UnionToIntersection<T>>]: NonNullable<UnionToIntersection<T>[K]>;
+  [K in keyof UnionToIntersection<T>]-?: NonNullable<UnionToIntersection<T>[K]>;
 };
+
 type Safe<Initial, To> = SafeProxy<Initial, To> & { [K in keyof U<To>]: Safe<Initial, U<To>[K]> };
 
 interface Proxied {
@@ -101,5 +103,5 @@ export default function safe<T>(v: T | undefined | null): Safe<T, T> {
     value: v,
     path: [] as Proxied['path']
   };
-  return _safe(p);
+  return _safe<T, T>(p);
 }

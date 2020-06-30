@@ -8,7 +8,6 @@ interface Type {
     b?: number;
   };
   arr?: Array<{ value?: number }>;
-  missing?: { value: number };
 }
 
 function roll(target: any, path: Array<string | number>): any {
@@ -52,6 +51,7 @@ describe('safe', () => {
 
     it('does not map the value if the path is undefined', async () => {
       const v: Type = { a: { b: 1 } };
+      // @ts-expect-error
       const n = await safe(v).missing.value.$pmap(async () => 1);
       expect(safe(n).missing.$).toEqual(undefined);
     });
@@ -117,6 +117,7 @@ describe('safe', () => {
 
     it('does not set the value if the path is undefined', () => {
       const v: Type = { a: { b: 1 } };
+      // @ts-expect-error
       const n = safe(v).missing.value.$set(1);
       expect(safe(n).missing.$).toEqual(undefined);
     });
@@ -148,7 +149,92 @@ describe('safe', () => {
 
     it('produces undefined if path does not exist', () => {
       const v: Type = { a: { b: 1 } };
+      // @ts-expect-error
       expect(safe(v).missing.$).toBe(undefined);
     });
+  });
+});
+
+type UnionType = { b: string } | { a: number };
+
+type UnionTypeWithIndex = { b: string } | { a: number; [key: string]: unknown };
+type UnionTypeWithIndexToNumber = { b: string } | { a: number; [key: string]: number };
+
+type NestedUnion = { a: { x: number } } | { b: { x: string } };
+
+type SharingUnion = { a: string } | { a: number };
+type SharingUnionLiteral = { a: 'toot' } | { a: 'doot' };
+
+type ArrayType = { a: Array<{ x: number }> };
+
+describe('union type traversal', () => {
+  const value: any = null as any;
+  it('narrows to union value', () => {
+    const num: number | undefined = safe<NestedUnion>(value).a.x.$;
+    expect(num).toBeFalsy();
+  });
+
+  describe('arrays', () => {
+    it('goes through arrays', () => {
+      const num: number | undefined = safe<ArrayType>(value).a[0].x.$;
+      expect(num).toBeFalsy();
+    });
+
+    it('rejects incorrect type', () => {
+      // @ts-expect-error
+      const num: string | undefined = safe<ArrayType>(value).a[0].x.$;
+      expect(num).toBeFalsy();
+    });
+  });
+
+  describe('indexed keys', () => {
+    it('prefers named prop types', () => {
+      const num: unknown | undefined = safe<UnionTypeWithIndex>(value).a.$;
+      expect(num).toBeFalsy();
+    });
+
+    it('allows indexed fields', () => {
+      const num: number | undefined = safe<UnionTypeWithIndexToNumber>(value).z.$;
+      expect(num).toBeFalsy();
+    });
+
+    it('join both sides of union', () => {
+      // @ts-expect-error
+      const num: number | undefined = safe<UnionTypeWithIndexToNumber>(value).b.$;
+      expect(num).toBeFalsy();
+    });
+  });
+
+  it('rejects mismatching type from nested union', () => {
+    // @ts-expect-error
+    const num: number | undefined = safe<NestedUnion>(value).b.x.$;
+    expect(num).toBeFalsy();
+  });
+
+  it('rejects missing type from union', () => {
+    // @ts-expect-error
+    const num: number | undefined = safe<NestedUnion>(value).b.r.$;
+    expect(num).toBeFalsy();
+  });
+
+  it('makes union of leaf types', () => {
+    const num: string | number | undefined = safe<SharingUnion>(value).a.$;
+    expect(num).toBeFalsy();
+  });
+
+  it('narrows to union value', () => {
+    const num: number | undefined = safe<UnionType>(value).a.$;
+    expect(num).toBeFalsy();
+  });
+
+  it("rejects mismatching type from union'", () => {
+    // @ts-expect-error
+    const num: number | undefined = safe<UnionType>(value).b.$;
+    expect(num).toBeFalsy();
+  });
+
+  it('makes union of leaf types', () => {
+    const num: 'toot' | 'doot' | undefined = safe<SharingUnionLiteral>(value).a.$;
+    expect(num).toBeFalsy();
   });
 });
