@@ -189,7 +189,7 @@ describe('union type traversal', () => {
 
   describe('indexed keys', () => {
     it('prefers named prop types', () => {
-      const num: number | undefined = safe<UnionTypeWithIndex>(value).a.$;
+      const num: unknown | undefined = safe<UnionTypeWithIndex>(value).a.$;
       expect(num).toBeFalsy();
     });
 
