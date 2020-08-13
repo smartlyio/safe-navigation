@@ -20,7 +20,7 @@
     "url": "https://github.com/smartlyio/safe-navigation.git"
   },
   "dependencies": {
-    "lodash": "4.17.19"
+    "lodash": "4.17.20"
   },
   "keywords": [
     "safe navigation",
