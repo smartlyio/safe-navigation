@@ -65,7 +65,7 @@ function clonePath(target: any, path: any[]) {
 
 function _safe<Initial, T>(v: Proxied): Safe<Initial, T> {
   return new Proxy(v, {
-    get(target: any, key: keyof Safe<Initial, T>) {
+    get(target: any, key: string) {
       if (key === '$') {
         const value = hasPath(target.value, target.path);
         return value === noValue ? undefined : value;
