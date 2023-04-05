@@ -157,9 +157,6 @@ describe('safe', () => {
 
 type UnionType = { b: string } | { a: number };
 
-type UnionTypeWithIndex = { b: string } | { a: number; [key: string]: unknown };
-type UnionTypeWithIndexToNumber = { b: string } | { a: number; [key: string]: number };
-
 type NestedUnion = { a: { x: number } } | { b: { x: string } };
 
 type SharingUnion = { a: string } | { a: number };
@@ -183,24 +180,6 @@ describe('union type traversal', () => {
     it('rejects incorrect type', () => {
       // @ts-expect-error
       const num: string | undefined = safe<ArrayType>(value).a[0].x.$;
-      expect(num).toBeFalsy();
-    });
-  });
-
-  describe('indexed keys', () => {
-    it('prefers named prop types', () => {
-      const num: unknown | undefined = safe<UnionTypeWithIndex>(value).a.$;
-      expect(num).toBeFalsy();
-    });
-
-    it('allows indexed fields', () => {
-      const num: number | undefined = safe<UnionTypeWithIndexToNumber>(value).z.$;
-      expect(num).toBeFalsy();
-    });
-
-    it('join both sides of union', () => {
-      // @ts-expect-error
-      const num: number | undefined = safe<UnionTypeWithIndexToNumber>(value).b.$;
       expect(num).toBeFalsy();
     });
   });
