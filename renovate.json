@@ -1,5 +1,6 @@
 {
   "extends": [
+    "config:best-practices",
     "config:js-lib"
   ],
   "vulnerabilityAlerts": {
@@ -7,38 +8,46 @@
   },
   "timezone": "Europe/Helsinki",
   "prHourlyLimit": 5,
-  "labels": ["patch"],
+  "labels": [
+    "patch"
+  ],
   "packageRules": [
     {
       "groupName": "Smartly packages",
       "packagePatterns": [
-        "^@smartly\/"
+        "^@smartly/"
       ],
       "excludePackagePatterns": [
-        "^@smartly\/asset-"
+        "^@smartly/asset-"
       ],
       "schedule": "at any time"
     },
     {
       "groupName": "Smartly Asset Library Components",
       "packagePatterns": [
-        "^@smartly\/asset-"
+        "^@smartly/asset-"
       ],
       "schedule": "at any time"
     },
     {
       "groupName": "Smartly Oats",
       "packagePatterns": [
-        "^@smartlyio\/oats"
+        "^@smartlyio/oats"
       ],
       "schedule": "at any time"
     },
     {
-      "depTypeList": ["devDependencies"],
-      "schedule" : "before 8am on monday",
+      "depTypeList": [
+        "devDependencies"
+      ],
+      "schedule": "before 8am on monday",
       "groupName": "devDependencies",
       "automerge": true,
-      "labels": ["dependencies", "no release"]
+      "labels": [
+        "dependencies",
+        "no release"
+      ]
     }
-  ]
+  ],
+  "minimumReleaseAge": "30 days"
 }
